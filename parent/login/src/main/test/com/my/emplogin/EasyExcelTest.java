@@ -69,14 +69,14 @@ public class EasyExcelTest {
          * 第二个参数读取时的数据类型
          * 第三个参数监听器
          */
-        EasyExcel.read("信息表" + ExcelTypeEnum.XLSX.getValue(), EasyExcelTestEntity.class, new AnalysisEventListener<EasyExcelTestEntity>() {
+        EasyExcel.read("信息表" + ExcelTypeEnum.XLSX.getValue(), new AnalysisEventListener<EasyExcelTestEntity>() {
             // 每读取一行就调用该方法
             @Override
             public void invoke(EasyExcelTestEntity o, AnalysisContext context) {
                 readList.add(o);
             }
 
-            // 全部都去完成
+            // 全部读取完成
             @Override
             public void doAfterAllAnalysed(AnalysisContext analysisContext) {
                 System.out.println("读取完成");
