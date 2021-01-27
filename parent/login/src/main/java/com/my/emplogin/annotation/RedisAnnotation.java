@@ -14,7 +14,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RedisAnnotation {
     // 用户标识key的前缀.
-    public String value();
+    String value();
+
     // 如果用户不写表示不需要超时. 如果写了以用户为准
-    public int seconds() default 0;
+    int seconds() default 0;
 }
