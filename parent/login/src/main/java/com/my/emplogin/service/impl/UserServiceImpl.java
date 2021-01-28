@@ -2,9 +2,10 @@ package com.my.emplogin.service.impl;
 
 
 import cn.hutool.system.SystemUtil;
+import com.my.emplogin.annotation.RedisAnnotation;
 import com.my.emplogin.dao.TokenMapper;
-import com.my.emplogin.entity.TokenInfo;
 import com.my.emplogin.dao.UserMapper;
+import com.my.emplogin.entity.TokenInfo;
 import com.my.emplogin.entity.UserInfoDO;
 import com.my.emplogin.service.UserService;
 import com.my.emplogin.util.MD5Util;
@@ -98,6 +99,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @RedisAnnotation(key = "userBaseInfo")
     public ResponseVO<UserSelfInfoResVO> getUserSelfInfo(String userId) {
         ResponseVO<UserSelfInfoResVO> resVOResponseVO = new ResponseVO<>();
         UserInfoDO userInfo = mapper.findUserByUserId(userId);
