@@ -6,7 +6,6 @@ import com.my.emplogin.entity.TokenInfo;
 import com.my.emplogin.vo.res.ResponseVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -24,7 +23,7 @@ import java.util.Date;
  * @author : tanghuai
  * @date : 2021/1/11 14:01
  */
-@Component
+// @Component
 @WebFilter(value = "MyFilter", urlPatterns = "/*")
 @Slf4j
 public class MyFilter implements Filter {
