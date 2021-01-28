@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @RedisAnnotation(key = "userBaseInfo")
+    @RedisAnnotation(key = "userBaseInfo", seconds = 100)
     public ResponseVO<UserSelfInfoResVO> getUserSelfInfo(String userId) {
         ResponseVO<UserSelfInfoResVO> resVOResponseVO = new ResponseVO<>();
         UserInfoDO userInfo = mapper.findUserByUserId(userId);

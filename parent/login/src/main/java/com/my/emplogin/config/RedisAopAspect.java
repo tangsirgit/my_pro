@@ -57,7 +57,7 @@ public class RedisAopAspect {
                     getLog.info("Redis 中不存在该记录，从数据库查找");
                     object = joinPoint.proceed();
                     if (object != null) {
-                        // 需要超时时间
+                        // 需要失效时间
                         if (redisAnnotation.seconds() > 0) {
                             redisTemplate.opsForValue().set(key, object, redisAnnotation.seconds(), TimeUnit.SECONDS);
                         } else {

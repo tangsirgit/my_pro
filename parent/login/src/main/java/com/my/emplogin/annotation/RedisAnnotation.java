@@ -16,7 +16,7 @@ public @interface RedisAnnotation {
     // 用户标识key的前缀.
     String key() default "";
 
-    // 如果用户不写表示不需要超时. 如果写了以用户为准
+    // 如果用户不写表示不需要失效. 如果写了以用户为准
     int seconds() default 0;
 
     // 是否为查询操作，默认是
