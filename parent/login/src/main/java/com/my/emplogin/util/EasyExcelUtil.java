@@ -53,7 +53,7 @@ public class EasyExcelUtil {
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
         // 这里URLEncoder.encode可以防止中文乱码
-        excelName = URLEncoder.encode(excelName, "UTF-8").replaceAll("\\+", "20%");
+        excelName = URLEncoder.encode(excelName, "UTF-8");
         response.setHeader("Content-disposition", "attachment;filename=" + excelName + ExcelTypeEnum.XLSX.getValue());
         EasyExcel.write(response.getOutputStream(), clazz)
                 .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
