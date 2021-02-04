@@ -4,14 +4,18 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.util.FileUtils;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.my.emplogin.entity.EasyExcelTestEntity;
+import com.my.emplogin.entity.ImageModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.io.File;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -83,5 +87,35 @@ public class EasyExcelTest {
             }
         }).sheet(1, "信息表").doRead();
         readList.forEach(System.out::println);
+    }
+
+    /**
+     * 图片导出
+     */
+    @Test
+    public void imageWrite() throws Exception {
+        String fileName = "图片" + ExcelTypeEnum.XLSX.getValue();
+        InputStream inputStream = null;
+        try {
+            List<ImageModel> list = new ArrayList<ImageModel>();
+            ImageModel imageModel = new ImageModel();
+            list.add(imageModel);
+            String filePath = "D:\\img.jpg";
+            // 放入5种类型的图片 实际使用只要一种即可
+            imageModel.setByteArray(FileUtils.readFileToByteArray(new File(filePath)));
+            imageModel.setFile(new File(filePath));
+            imageModel.setString(filePath);
+            inputStream = FileUtils.openInputStream(new File(filePath));
+            imageModel.setInputStream(inputStream);
+           /* imageModel.setUrl(new URL(
+                    "https://raw.githubusercontent.com/alibaba/easyexcel/master/src/test/resources/converter/img.jpg"
+            ));*/
+            EasyExcel.write(fileName, ImageModel.class).sheet(0, "哈哈").doWrite(list);
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+
+        }
     }
 }
