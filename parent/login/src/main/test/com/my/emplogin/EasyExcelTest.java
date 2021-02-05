@@ -1,13 +1,17 @@
 package com.my.emplogin;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
+import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.util.FileUtils;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.my.emplogin.entity.EasyExcelTestEntity;
 import com.my.emplogin.entity.ImageModel;
+import com.my.emplogin.model.SheetOneTestModel;
+import com.my.emplogin.model.SheetSecondTestModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -60,6 +64,35 @@ public class EasyExcelTest {
 
     }
 
+    /**
+     * 图片导出
+     */
+    @Test
+    public void imageWrite() throws Exception {
+        String fileName = "图片" + ExcelTypeEnum.XLSX.getValue();
+        InputStream inputStream = null;
+        try {
+            List<ImageModel> list = new ArrayList<ImageModel>();
+            ImageModel imageModel = new ImageModel();
+            list.add(imageModel);
+            String filePath = "D:\\img.jpg";
+            // 放入5种类型的图片 实际使用只要一种即可
+            imageModel.setByteArray(FileUtils.readFileToByteArray(new File(filePath)));
+            imageModel.setFile(new File(filePath));
+            imageModel.setString(filePath);
+            inputStream = FileUtils.openInputStream(new File(filePath));
+            imageModel.setInputStream(inputStream);
+           /* imageModel.setUrl(new URL(
+                    "https://raw.githubusercontent.com/alibaba/easyexcel/master/src/test/resources/converter/img.jpg"
+            ));*/
+            EasyExcel.write(fileName, ImageModel.class).sheet(0, "哈哈").doWrite(list);
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+
+        }
+    }
 
     // EasyExcel 导入测试
     @Test
@@ -91,32 +124,41 @@ public class EasyExcelTest {
     }
 
     /**
-     * 图片导出
+     * EasyExcel 多sheet导入测试
      */
     @Test
-    public void imageWrite() throws Exception {
-        String fileName = "图片" + ExcelTypeEnum.XLSX.getValue();
-        InputStream inputStream = null;
-        try {
-            List<ImageModel> list = new ArrayList<ImageModel>();
-            ImageModel imageModel = new ImageModel();
-            list.add(imageModel);
-            String filePath = "D:\\img.jpg";
-            // 放入5种类型的图片 实际使用只要一种即可
-            imageModel.setByteArray(FileUtils.readFileToByteArray(new File(filePath)));
-            imageModel.setFile(new File(filePath));
-            imageModel.setString(filePath);
-            inputStream = FileUtils.openInputStream(new File(filePath));
-            imageModel.setInputStream(inputStream);
-           /* imageModel.setUrl(new URL(
-                    "https://raw.githubusercontent.com/alibaba/easyexcel/master/src/test/resources/converter/img.jpg"
-            ));*/
-            EasyExcel.write(fileName, ImageModel.class).sheet(0, "哈哈").doWrite(list);
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
+    public void testManyRead() {
+        List<SheetOneTestModel> l1 = new ArrayList<>();
+        List<SheetSecondTestModel> l2 = new ArrayList<>();
+        ExcelReader build = EasyExcel.read("测试.xlsx").build();
+        ReadSheet s1 = EasyExcel.readSheet(0).head(SheetOneTestModel.class).registerReadListener(new AnalysisEventListener<SheetOneTestModel>() {
+            @Override
+            public void invoke(SheetOneTestModel o, AnalysisContext analysisContext) {
+                l1.add(o);
             }
 
+            @Override
+            public void doAfterAllAnalysed(AnalysisContext analysisContext) {
+
+            }
+        }).build();
+        ReadSheet s2 = EasyExcel.readSheet(1).head(SheetSecondTestModel.class).registerReadListener(new AnalysisEventListener<SheetSecondTestModel>() {
+            @Override
+            public void invoke(SheetSecondTestModel o, AnalysisContext analysisContext) {
+                l2.add(o);
+            }
+
+            @Override
+            public void doAfterAllAnalysed(AnalysisContext analysisContext) {
+
+            }
+        }).build();
+        build.read(s1, s2);
+        if (build != null) {
+            build.finish();
         }
+
+        l1.forEach(System.out::println);
+        l2.forEach(System.out::println);
     }
 }

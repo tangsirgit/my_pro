@@ -34,6 +34,6 @@ public class EasyExcelListener extends AnalysisEventListener {
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-
+        logger.info("所有数据解析完成！！！");
     }
 }
