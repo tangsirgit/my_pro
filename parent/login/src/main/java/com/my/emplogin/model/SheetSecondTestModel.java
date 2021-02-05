@@ -2,6 +2,8 @@ package com.my.emplogin.model;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * sheet2测试
  *
@@ -13,4 +15,5 @@ public class SheetSecondTestModel {
     private String hobby;
     private Double salary;
     private String job;
+    private Date date;
 }

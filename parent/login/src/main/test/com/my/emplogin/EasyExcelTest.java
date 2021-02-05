@@ -12,6 +12,7 @@ import com.my.emplogin.entity.EasyExcelTestEntity;
 import com.my.emplogin.entity.ImageModel;
 import com.my.emplogin.model.SheetOneTestModel;
 import com.my.emplogin.model.SheetSecondTestModel;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +32,7 @@ import java.util.*;
 @SpringBootTest
 //由于是Web项目，Junit需要模拟ServletContext，因此我们需要给我们的测试类加上@WebAppConfiguration。
 @WebAppConfiguration
+@Slf4j
 public class EasyExcelTest {
 
     // EasyExcel导出测试
@@ -152,6 +154,15 @@ public class EasyExcelTest {
             public void doAfterAllAnalysed(AnalysisContext analysisContext) {
 
             }
+
+           /* @Override
+            public void onException(Exception exception, AnalysisContext context) throws Exception {
+                // 获取异常解析列
+                if (exception instanceof ExcelDataConvertException){
+                    ExcelDataConvertException e = (ExcelDataConvertException)exception;
+                    log.info("第{}行，第{}列解析异常",e.getRowIndex(),e.getColumnIndex());
+                }
+            }*/
         }).build();
         build.read(s1, s2);
         if (build != null) {
