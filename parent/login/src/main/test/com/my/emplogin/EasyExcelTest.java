@@ -22,6 +22,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.io.File;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -84,9 +85,9 @@ public class EasyExcelTest {
             imageModel.setString(filePath);
             inputStream = FileUtils.openInputStream(new File(filePath));
             imageModel.setInputStream(inputStream);
-           /* imageModel.setUrl(new URL(
-                    "https://raw.githubusercontent.com/alibaba/easyexcel/master/src/test/resources/converter/img.jpg"
-            ));*/
+            imageModel.setUrl(new URL(
+                    "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fa0.att.hudong.com%2F30%2F29%2F01300000201438121627296084016.jpg&refer=http%3A%2F%2Fa0.att.hudong.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1615101251&t=eb240d6c8cd3e9617466df987e10a470"
+            ));
             EasyExcel.write(fileName, ImageModel.class).sheet(0, "哈哈").doWrite(list);
         } finally {
             if (inputStream != null) {

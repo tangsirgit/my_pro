@@ -3,6 +3,7 @@ package com.my.emplogin.entity;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.annotation.write.style.ContentRowHeight;
+import com.alibaba.excel.annotation.write.style.OnceAbsoluteMerge;
 import com.alibaba.excel.converters.string.StringImageConverter;
 import lombok.Data;
 
@@ -19,6 +20,8 @@ import java.net.URL;
 @Data
 @ContentRowHeight(100)
 @ColumnWidth(100 / 8)
+// 将第2-3行的5-6列合并成一个单元格
+@OnceAbsoluteMerge(firstRowIndex = 1, lastRowIndex = 2, firstColumnIndex = 4, lastColumnIndex = 5)
 public class ImageModel {
     private File file;
     private InputStream inputStream;
@@ -33,6 +36,7 @@ public class ImageModel {
     /**
      * 根据url导出
      */
+    @ExcelProperty(value = "url")
     private URL url;
 
 }
