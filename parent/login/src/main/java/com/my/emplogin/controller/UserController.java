@@ -13,7 +13,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -55,13 +58,13 @@ public class UserController {
 
     @PostMapping("/register")
     @ApiOperation("用户注册")
-    public ResponseVO<String> register(@Valid @RequestBody RegisterReqVO vo,HttpServletRequest request){
+    public ResponseVO<String> register(@Valid @RequestBody RegisterReqVO vo, HttpServletRequest request) {
         // 1 核对验证是否正确
         HttpSession session = request.getSession();
         String sessionVerifyCode = (String) session.getAttribute(RandomValidateCodeUtil.RANDOMCODEKEY);
         session.removeAttribute(RandomValidateCodeUtil.RANDOMCODEKEY);
         // 2 验证不正确
-        if (!vo.getVerifyCode().equalsIgnoreCase(sessionVerifyCode)){
+        if (!vo.getVerifyCode().equalsIgnoreCase(sessionVerifyCode)) {
             return new ResponseVO<String>().error("输入验证码不正确");
         }
 
