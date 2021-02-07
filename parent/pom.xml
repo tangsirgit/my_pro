@@ -11,6 +11,7 @@
     <modules>
         <module>myInterceptor</module>
         <module>login</module>
+        <module>designMode</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
