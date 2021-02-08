@@ -16,6 +16,7 @@ interface AbstractSender {
  * @date : 2021/2/7 15:10
  */
 public class AbstractFactory {
+
 }
 
 class AbstractEmail implements AbstractSender {
