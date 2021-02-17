@@ -3,15 +3,18 @@ package com.my.emplogin.util;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
-import com.sun.deploy.net.URLEncoder;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -22,6 +25,8 @@ import java.util.List;
  */
 @Slf4j
 public class EasyExcelUtil {
+
+    private static final Logger log = LoggerFactory.getLogger(EasyExcelUtil.class);
 
     /**
      * 导出Excel(07版.xlsx)到指定路径下
