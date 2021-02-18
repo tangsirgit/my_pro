@@ -45,8 +45,8 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/hello/user").hasRole("USER") //添加/product/** 下的所有请求只能由user角色才能访问
-                .antMatchers("/hello/admin").hasRole("ADMIN") //添加/admin/** 下的所有请求只能由admin角色才能访问
+                .antMatchers("/hello/user").hasRole("USER") //添加/hello/user 下的所有请求只能由user角色才能访问
+                .antMatchers("/hello/admin").hasRole("ADMIN") //添加/hello/admin 下的所有请求只能由admin角色才能访问
                 .anyRequest().authenticated() // 没有定义的请求，所有的角色都可以访问（tmp也可以）。
                 .and()
                 .formLogin().and()
