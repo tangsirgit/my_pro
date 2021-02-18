@@ -30,7 +30,7 @@ public class CustomUserDetailService implements UserDetailsService {
         // 查询用户
         UserDO userByUserLogin = userDao.findUserByUserLogin(s);
         if (userByUserLogin == null) {
-            // log.warn("User:{} not found",s);
+            log.warn("User:{} not found", s);
             throw new UsernameNotFoundException("User " + s + " was not found in db");
             //这里找不到必须抛异常
         }
