@@ -1,16 +1,12 @@
 package com.my.study.config;
 
+import com.my.study.handler.MyAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.annotation.Resource;
 
 /**
  * 使用数据库的用户
@@ -20,53 +16,35 @@ import javax.annotation.Resource;
  */
 @Configuration
 public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Resource
-    private UserDetailsService userDetailsService;
-
     /**
-     * 自定义service
+     * 自定义权限访问设置，父类型中的配置逻辑
      *
-     * @param auth
-     * @throws Exception
-     */
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)// 设置自定义的userDetailsService
-                .passwordEncoder(passwordEncoder());
-    }
-
-    /**
-     * 权限访问设置
-     *
-     * @param http
+     * @param http 基于http协议的security配置对象，包含所有的springsecurity相关配置
      * @throws Exception
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/hello/user").hasRole("USER") //添加/hello/user 下的所有请求只能由user角色才能访问
-                .antMatchers("/hello/admin").hasRole("ADMIN") //添加/hello/admin 下的所有请求只能由admin角色才能访问
-                .anyRequest().authenticated() // 没有定义的请求，所有的角色都可以访问（tmp也可以）。
+        http // 关闭csrf安全协议，为了完整流程可用
+                .authorizeRequests().antMatchers("/hello/toLogin").permitAll() // /toLogin请求地址可以随意访问
+                .antMatchers("/hello/loginFail").permitAll()
+                .anyRequest().authenticated() // 任意的请求，都必须认证
                 .and()
-                .formLogin().and()
-                .httpBasic().and().logout().logoutUrl("/logout");
-    }
+                .formLogin()
+                .loginPage("/hello/toLogin") // 当用户未登录时跳转,跳转的登录页面
+                .loginProcessingUrl("/suibian") // 用户登录逻辑的请求地址是什么
+                //.successForwardUrl("/hello/loginSuccess"); // 登录成功后的请求转发，处理post请求
+                //.defaultSuccessUrl("/hello/loginSuccess"); // 登录成功后的重定向，get请求,
+                .successHandler(new MyAuthenticationSuccessHandler("/hello/loginSuccess", true)) // 自定义认证处理逻辑，可以是请求转发，也可以是重定向。
+                //.failureForwardUrl("/hello/loginFail"); // 失败之后的请求转发，处理的是post请求
+                .failureUrl("/hello/loginFail"); // 失败之后的响应重定向,记得提供权限认证
 
-    /**
-     * 放行资源
-     *
-     * @param web
-     * @throws Exception
-     */
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/hello/testPass");
+        http.csrf().disable();
+
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();// 使用不使用加密算法保持密码
-//        return new BCryptPasswordEncoder();
+        //return NoOpPasswordEncoder.getInstance();// 使用不使用加密算法保持密码
+        return new BCryptPasswordEncoder();
     }
 }
