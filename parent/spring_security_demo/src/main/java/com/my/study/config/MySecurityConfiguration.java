@@ -39,13 +39,19 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 //.failureUrl("/hello/loginFail"); // 失败之后的响应重定向,记得提供权限认证
                 .failureHandler(new MyAuthenticationFailureHandler("/hello/loginFail", true));
 
+
+        /**
+         * antMatches - 程序员最常用 基于匹配符
+         * regexMatchers - 程序员排斥，推荐使用 , 正则表达式
+         * anyRequest  相当于/**的antMatches
+         */
         http
                 .authorizeRequests().antMatchers("/hello/toLogin").permitAll() // /toLogin请求地址可以随意访问
                 .antMatchers("/hello/loginFail").permitAll()
                 .anyRequest().authenticated(); // 任意的请求，都必须认证
 
-        http    // 关闭csrf安全协议，为了完整流程可用
-                .csrf().disable();
+        http
+                .csrf().disable();// 关闭csrf安全协议，为了完整流程可用
 
     }
 
