@@ -44,9 +44,21 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
          * antMatches - 程序员最常用 基于匹配符
          * regexMatchers - 程序员排斥，推荐使用 , 正则表达式
          * anyRequest  相当于/**的antMatches
+         *
+         */
+
+        /**
+         * permitAll() 所有都可以访问,免登录访问，一般是通用资源，和登录页面等
+         * anonymous() 匿名访问，登录之后不能访问
+         * authenticated() 登录才能访问，保护资源，比如个人信息，订单查看，密码修改等
+         * denyAll() 任意用户，任意状态都不能访问
+         * fullyAuthenticated() 完整登录才能访问，描述敏感资源的，比如钱
+         * rememberMe() 记住我 ， 自动登录|n天免登录，非敏感资源除钱操作相关意外的资源
+         *
+         * 以上方法都调用底层access()方法
          */
         http
-                .authorizeRequests().antMatchers("/hello/toLogin").permitAll() // /toLogin请求地址可以随意访问
+                .authorizeRequests().antMatchers("/hello/toLogin").anonymous() // /toLogin请求地址可以随意访问
                 .antMatchers("/hello/loginFail").permitAll()
                 .anyRequest().authenticated(); // 任意的请求，都必须认证
 
