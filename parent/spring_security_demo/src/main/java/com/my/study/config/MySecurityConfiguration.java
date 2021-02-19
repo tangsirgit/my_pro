@@ -1,5 +1,6 @@
 package com.my.study.config;
 
+import com.my.study.handler.MyAuthenticationFailureHandler;
 import com.my.study.handler.MyAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,8 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 //.defaultSuccessUrl("/hello/loginSuccess"); // 登录成功后的重定向，get请求,
                 .successHandler(new MyAuthenticationSuccessHandler("/hello/loginSuccess", true)) // 自定义认证处理逻辑，可以是请求转发，也可以是重定向。
                 //.failureForwardUrl("/hello/loginFail"); // 失败之后的请求转发，处理的是post请求
-                .failureUrl("/hello/loginFail"); // 失败之后的响应重定向,记得提供权限认证
+                //.failureUrl("/hello/loginFail"); // 失败之后的响应重定向,记得提供权限认证
+                .failureHandler(new MyAuthenticationFailureHandler("/hello/loginFail", true));
 
         http // 关闭csrf安全协议，为了完整流程可用
                 .authorizeRequests().antMatchers("/hello/toLogin").permitAll() // /toLogin请求地址可以随意访问
