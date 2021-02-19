@@ -5,7 +5,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
- * java配置用户名到内存
+ * java配置用户名到内存，看一看就行
  *
  * @author : tanghuai
  * @date : 2021/2/18 10:23
