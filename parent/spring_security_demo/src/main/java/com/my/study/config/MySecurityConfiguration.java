@@ -24,12 +24,11 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http // 关闭csrf安全协议，为了完整流程可用
-                .authorizeRequests().antMatchers("/hello/toLogin").permitAll() // /toLogin请求地址可以随意访问
-                .antMatchers("/hello/loginFail").permitAll()
-                .anyRequest().authenticated() // 任意的请求，都必须认证
-                .and()
+
+        http
                 .formLogin()
+                .usernameParameter("username") // 设置请求参数中，用户名名称，默认username
+                .passwordParameter("password") // 设置请求参数中，用户密码名称，默认password
                 .loginPage("/hello/toLogin") // 当用户未登录时跳转,跳转的登录页面
                 .loginProcessingUrl("/suibian") // 用户登录逻辑的请求地址是什么
                 //.successForwardUrl("/hello/loginSuccess"); // 登录成功后的请求转发，处理post请求
@@ -37,6 +36,11 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .successHandler(new MyAuthenticationSuccessHandler("/hello/loginSuccess", true)) // 自定义认证处理逻辑，可以是请求转发，也可以是重定向。
                 //.failureForwardUrl("/hello/loginFail"); // 失败之后的请求转发，处理的是post请求
                 .failureUrl("/hello/loginFail"); // 失败之后的响应重定向,记得提供权限认证
+
+        http // 关闭csrf安全协议，为了完整流程可用
+                .authorizeRequests().antMatchers("/hello/toLogin").permitAll() // /toLogin请求地址可以随意访问
+                .antMatchers("/hello/loginFail").permitAll()
+                .anyRequest().authenticated(); // 任意的请求，都必须认证
 
         http.csrf().disable();
 

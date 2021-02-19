@@ -1,6 +1,8 @@
 package com.my.study.controller;
 
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,5 +31,15 @@ public class HelloController {
     public ModelAndView loginFail() {
         ModelAndView modelAndView = new ModelAndView("fail");
         return modelAndView;
+    }
+
+    @GetMapping("/getInfo")
+    public String getInfo() {
+        String userName = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails) principal).getUsername();
+        }
+        return userName;
     }
 }
