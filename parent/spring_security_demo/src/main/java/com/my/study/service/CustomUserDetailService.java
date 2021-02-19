@@ -1,8 +1,9 @@
 package com.my.study.service;
 
-import com.my.study.Dao.UserDao;
+import com.my.study.dao.UserDao;
 import com.my.study.entity.UserDO;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +18,11 @@ import javax.annotation.Resource;
  * @date : 2021/2/18 10:45
  */
 @Component
-@Slf4j
 public class CustomUserDetailService implements UserDetailsService {
     @Resource
     private UserDao userDao;
+
+    private static final Logger log = LoggerFactory.getLogger(CustomUserDetailService.class);
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

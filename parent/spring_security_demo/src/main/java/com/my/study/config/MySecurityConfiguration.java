@@ -30,8 +30,8 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .usernameParameter("username") // 设置请求参数中，用户名名称，默认username
                 .passwordParameter("password") // 设置请求参数中，用户密码名称，默认password
-                .loginPage("/hello/toLogin") // 当用户未登录时跳转,跳转的登录页面
-                .loginProcessingUrl("/suibian") // 用户登录逻辑的请求地址是什么
+                .loginPage("/hello/toLogin") // 当用户未登录时跳转,跳转的登录页面 必须是get请求
+                .loginProcessingUrl("/suibian") // 用户登录逻辑的请求地址
                 //.successForwardUrl("/hello/loginSuccess"); // 登录成功后的请求转发，处理post请求
                 //.defaultSuccessUrl("/hello/loginSuccess"); // 登录成功后的重定向，get请求,
                 .successHandler(new MyAuthenticationSuccessHandler("/hello/loginSuccess", true)) // 自定义认证处理逻辑，可以是请求转发，也可以是重定向。
