@@ -2,6 +2,7 @@ package com.my.study.config;
 
 import com.my.study.handler.MyAuthenticationFailureHandler;
 import com.my.study.handler.MyAuthenticationSuccessHandler;
+import com.my.study.service.MyAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     /**
      * 自定义权限访问设置，父类型中的配置逻辑
      *
@@ -74,6 +76,11 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/guest/read").hasAnyAuthority("admin:read", "guest:read")
                 .anyRequest().authenticated(); // 任意的请求，都必须认证
 
+        // 自定义403无权限页面
+        http
+                .exceptionHandling()
+                .accessDeniedHandler(new MyAccessDeniedHandler());
+
         http
                 .csrf().disable();// 关闭csrf安全协议，为了完整流程可用
 
@@ -84,4 +91,5 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
         //return NoOpPasswordEncoder.getInstance();// 使用不使用加密算法保持密码
         return new BCryptPasswordEncoder();
     }
+
 }
