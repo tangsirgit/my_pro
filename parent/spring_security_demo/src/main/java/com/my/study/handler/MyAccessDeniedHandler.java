@@ -1,4 +1,4 @@
-package com.my.study.service;
+package com.my.study.handler;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

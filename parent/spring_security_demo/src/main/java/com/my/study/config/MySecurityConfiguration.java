@@ -1,8 +1,8 @@
 package com.my.study.config;
 
+import com.my.study.handler.MyAccessDeniedHandler;
 import com.my.study.handler.MyAuthenticationFailureHandler;
 import com.my.study.handler.MyAuthenticationSuccessHandler;
-import com.my.study.service.MyAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
