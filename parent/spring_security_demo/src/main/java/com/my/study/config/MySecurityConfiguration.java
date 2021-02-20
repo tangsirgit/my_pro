@@ -60,6 +60,18 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests().antMatchers("/hello/toLogin").anonymous() // /toLogin请求地址可以随意访问
                 .antMatchers("/hello/loginFail").permitAll()
+                // 基于角色的权限管理
+                //.antMatchers("/admin/read").hasRole("管理员")
+                //.antMatchers("/guest/read").hasAnyRole("管理员","访客")
+                //.antMatchers("/guest/write").hasRole("访客")
+
+
+                // 客户端ip地址的权限管理，限制客户端的时候使用，提供给内部指定客户端访问
+                // .antMatchers("/ip").hasIpAddress("127.0.0.1") // 客户端ip地址符合的
+
+                // 基于资源管理的权限管理
+                .antMatchers("/admin/read").hasAuthority("admin:read")
+                .antMatchers("/guest/read").hasAnyAuthority("admin:read", "guest:read")
                 .anyRequest().authenticated(); // 任意的请求，都必须认证
 
         http

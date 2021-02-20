@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 /**
  * @author : tanghuai
@@ -28,6 +29,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 查询用户
         UserDO userByUserLogin = userDao.findUserByUserLogin(username);
+        System.out.println(userByUserLogin);
         if (userByUserLogin == null) {
             log.warn("User:{} not found", username);
             throw new UsernameNotFoundException("User " + username + " was not found in db");
@@ -35,6 +37,17 @@ public class CustomUserDetailService implements UserDetailsService {
         }
 
         // 2.设置角色
-        return new User(username, userByUserLogin.getPassword(), AuthorityUtils.createAuthorityList());
+        // 在spring-security中，对角色的命名有严格的规则，要求角色名称的前缀必须是ROLE_。不要再数据库中保存
+        // 再Spring-security中，角色和权限是平等的，都代表用户的访问权限。
+        // 处理角色的名称问题
+        String[] authorities = new String[userByUserLogin.getRoles().size() + userByUserLogin.getResources().size()];
+        for (int i = 0; i < userByUserLogin.getRoles().size(); i++) {
+            authorities[i] = "ROLE_" + userByUserLogin.getRoles().get(i);
+        }
+        for (int i = 0; i < userByUserLogin.getResources().size(); i++) {
+            authorities[userByUserLogin.getRoles().size() + i] = userByUserLogin.getResources().get(i);
+        }
+        System.out.println(Arrays.toString(authorities));
+        return new User(username, userByUserLogin.getPassword(), AuthorityUtils.createAuthorityList(authorities));
     }
 }

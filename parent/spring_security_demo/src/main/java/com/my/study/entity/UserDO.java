@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * 用户实体
  *
@@ -22,7 +24,7 @@ public class UserDO {
     /**
      * 用户名
      */
-    private String login;
+    private String username;
 
     /**
      * 用户密码
@@ -30,8 +32,12 @@ public class UserDO {
     private String password;
 
     /**
-     * 用户角色
+     * 角色集合
      */
-    private String role;
+    private List<String> roles;
 
+    /**
+     * 资源集合
+     */
+    private List<String> resources;
 }
