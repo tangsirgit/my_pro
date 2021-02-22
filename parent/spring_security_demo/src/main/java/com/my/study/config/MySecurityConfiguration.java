@@ -7,8 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 
 /**
  * 使用数据库的用户
@@ -24,7 +30,15 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
      *
      * @param http 基于http协议的security配置对象，包含所有的springsecurity相关配置
      * @throws Exception
+     *
      */
+
+    @Resource
+    private UserDetailsService userDetailsService;
+
+    @Resource
+    private PersistentTokenRepository persistentTokenRepository;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
@@ -81,6 +95,13 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedHandler(new MyAccessDeniedHandler());
 
+        // 配置remember-me
+        http.rememberMe()
+                .rememberMeParameter("remember-me") // 配置remember-me的cookie名称，默认为remember-me
+                .tokenValiditySeconds(60) // 配置remember-me的cookie有效时间，默认为14天，即记住我的时间。
+                .userDetailsService(userDetailsService)
+                .tokenRepository(persistentTokenRepository);
+
         http
                 .csrf().disable();// 关闭csrf安全协议，为了完整流程可用
 
@@ -90,6 +111,17 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         //return NoOpPasswordEncoder.getInstance();// 使用不使用加密算法保持密码
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(DataSource dataSource){
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+
+
+        // 创建remember-me记录的数据库，第一次启动的时候使用，后面使用需要关闭，不然程序会报错
+       // jdbcTokenRepository.setCreateTableOnStartup(true);
+        return jdbcTokenRepository;
     }
 
 }
