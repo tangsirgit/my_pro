@@ -1,8 +1,5 @@
 package com.my.study.service;
 
-import cn.afterturn.easypoi.excel.annotation.ExcelEntity;
-
-import java.util.List;
 
 /**
  * EasyExcelService
