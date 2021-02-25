@@ -1,19 +1,59 @@
-package com.my.study;
+package com.my.streamdemo;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.Collator;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * @author tanghuai
- * @date 2021/2/24
+ * @author : tanghuai
+ * @date : 2021/2/24 15:53
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class StreamTest {
     @Test
-    public void streamTest() {
-        List<String> strings = Arrays.asList("abc", "", "bcd", "def", "acd");
+    public void stream() {
+
+        List<String> strings = Arrays.asList("abc", "", "sad", "", "abc");
+
+        // filter 过滤
+        List<String> filter = strings.stream().filter(str -> !str.isEmpty()).collect(Collectors.toList());
+        System.out.println(filter);
+
+        // distinct 去重
+        List<String> distinct = strings.stream().distinct().collect(Collectors.toList());
+        System.out.println(distinct);
+
+        // limit 获取流中的前几个元素
+        List<String> limit = strings.stream().limit(2).collect(Collectors.toList());
+        System.out.println(limit);
+
+        // skip 过滤掉点前n个
+        List<String> skip = strings.stream().skip(2).collect(Collectors.toList());
+        System.out.println(skip);
+
+        // map 对流中所有元素进行统一处理
+        List<String> map = strings.stream().map(str -> str.concat("_map")).collect(Collectors.toList());
+        System.out.println(map);
+
+        // flatMap flatMap把所有流合并为一个流
+        List<Character> flatMap = strings.stream().flatMap(str -> getStreamCharacter(str)).collect(Collectors.toList());
+        System.out.println(flatMap);
+
+        // map和flatMap的对比 flatMap把所有流合并为一个流
+        List<Stream<Character>> mapCompareFlatMap = strings.stream().map(str -> getStreamCharacter(str)).collect(Collectors.toList());
+
+        List<User> users = Arrays.asList(new User("张三", 12), new User("AngleBaby", 23), new User("李四", 13),
+                new User("张三", 11));
+        Map<Integer, List<User>> collect = users.stream().collect(Collectors.groupingBy(User::getAge));
+        System.out.println(collect);
+
 
         // sorted 排序
         List<String> sorted = strings.stream().sorted().collect(Collectors.toList());
@@ -29,8 +69,6 @@ public class StreamTest {
         System.out.println(chineseSortedReverse);
 
 
-        List<User> users = Arrays.asList(new User("张三", 12), new User("AngleBaby", 23), new User("李四", 13),
-                new User("张三", 11));
         // 自定义排序规则，先按照用户姓名排序，然后按照年龄排序
         List<User> sortedUser = users.stream().sorted(new Comparator<User>() {
             @Override
@@ -40,7 +78,6 @@ public class StreamTest {
                 return count == 0 ? o1.getAge().compareTo(o2.getAge()) : count;
             }
         }).collect(Collectors.toList());
-        ;
     }
 
     /**
@@ -110,5 +147,16 @@ public class StreamTest {
         long count = strings.stream().count();
         System.out.println("count:" + count);
     }
-}
 
+
+    /**
+     * 把字符出转换为字符流
+     */
+    public Stream<Character> getStreamCharacter(String str) {
+        List<Character> characters = new ArrayList<>(24);
+        for (int i = 0; i < str.length(); i++) {
+            characters.add(str.charAt(i));
+        }
+        return characters.stream();
+    }
+}

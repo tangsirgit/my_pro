@@ -13,6 +13,7 @@
         <module>login</module>
         <module>designMode</module>
         <module>spring_security_demo</module>
+        <module>streamstudy</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
