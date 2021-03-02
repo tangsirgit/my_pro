@@ -1,0 +1,15 @@
+server:
+  port: 7010
+
+spring:
+  application:
+    name: goods-server
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: http://localhost:3306/spring_cloud
+    username: root
+    data-password: th1010110
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true # 开启mybatis驼峰
