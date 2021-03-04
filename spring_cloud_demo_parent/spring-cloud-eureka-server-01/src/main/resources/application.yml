@@ -1,0 +1,15 @@
+server:
+  port: 7001
+
+
+eureka:
+  instance:
+    hostname: localhost #设置注册中心
+  client:
+    # register-with-eureka: false #禁止自己注册自己
+    # fetch-registry: false #不去从服务器检索其他服务，自己就是注册中心
+    service-url:
+      defultZone: http://localhost:7002/eureka/
+spring:
+  application:
+    name: eureka-server-01

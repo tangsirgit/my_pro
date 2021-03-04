@@ -12,6 +12,7 @@
         <module>spring-cloud-goods</module>
         <module>spring-cloud-commons</module>
         <module>spring-cloud-front</module>
+        <module>spring-cloud-eureka-02</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

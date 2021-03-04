@@ -4,3 +4,13 @@ server:
 spring:
   application:
     name: front-server
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7000/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 2 # 没隔两秒项服务器发送一次心跳，证明自己依然存活
+    lease-expiration-duration-in-seconds: 10 # 告诉服务器，如果十秒之内没有发送心跳就代表我故障了，将我剔除掉
+    prefer-ip-address: true # 告诉服务端，服务实例以IP作为链接，而不是以机器名
+    instance-id: 34-springcloud-service-front # 告诉服务器，服务实例名字
